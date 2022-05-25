@@ -1,0 +1,38 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  continuous-integration:
+    runs-on: [ubuntu-latest]
+ 
+    steps:
+      - uses: actions/checkout@v2
+ 
+      - uses: iterative/setup-cml@v1
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+ 
+      - name: cml
+        env:
+          REPO_TOKEN: ${{ secrets.CI_CD_BOSTON_TOKEN }}
+        run: |
+          pip3 install -r requirements.txt
+          python src/models/train_model.py
+          
+
+  continuous-deployment:
+    needs: continuous-integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "classificateur-de-piece" #Must be unique in Heroku
+          heroku_email: "h.hurchand@gmail.com"

@@ -177,4 +177,8 @@ try:
         mlflow.sklearn.log_model(model_rf, "model")
         tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
 except:
+<<<<<<< HEAD
     print("logged on dogs hub")
+=======
+    print("logged on dogs hub")
+>>>>>>> 524af468713248f61f4a3c99d56f9e79134552fa
