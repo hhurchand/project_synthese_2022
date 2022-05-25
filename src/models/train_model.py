@@ -169,9 +169,12 @@ print(classification_report(Y_test, y_predict, output_dict=True)["weighted avg"]
 
 
 mlflow.set_experiment(experiment_name="experiment0")
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
-with mlflow.start_run():
+try:
+    mlflow.set_tracking_uri("http://127.0.0.1:5000")
+    with mlflow.start_run():
 #for model_name,accuracy in result_frame.items():
-    mlflow.log_metric("Accuracy",result_frame[RandomForestClassifier().__class__.__name__][0])
-    mlflow.sklearn.log_model(model_rf, "model")
-    tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
+        mlflow.log_metric("Accuracy",result_frame[RandomForestClassifier().__class__.__name__][0])
+        mlflow.sklearn.log_model(model_rf, "model")
+        tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
+except:
+    print("logged on dogs hub")
