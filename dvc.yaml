@@ -1,0 +1,7 @@
+stages:
+
+  model_train:
+    cmd: python src/models/train_model.py
+    deps:
+    - src/models/dataframe_test.csv
+    - src/models/train_model.py

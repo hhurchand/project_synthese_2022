@@ -1,0 +1,7 @@
+model_train:
+  cmd: python src/models/train_model.py
+  deps:
+  - path: src/models/dataframe_test.csv
+    md5: 8d41d98422eeb3e686f0929d447fdbad
+  - path: src/models/train_model.py
+    md5: 2755b126af7fa7b070424f35b0368dc5
