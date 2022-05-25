@@ -5,3 +5,11 @@ stages:
     deps:
     - src/models/dataframe_test.csv
     - src/models/train_model.py
+
+  deploy_model:
+    cmd: python app.py
+    deps:
+    - models/model_rf.pkl
+    - models/scaler.pkl
+    - templates/index.html
+    - static

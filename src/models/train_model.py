@@ -27,6 +27,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 
+import pickle
+
 import logging
 logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
@@ -152,9 +154,12 @@ fig, ax = plt.subplots()
 forest_importances.plot.bar(ax=ax)
 ax.set_title("Feature importances")
 ax.set_ylabel("Mean decrease in impurity")
-plt.figure(figsize=(20, 20))
+plt.figure(figsize=(20, 21))
 fig.tight_layout()
 
+# save serialized model and scaler
+pickle.dump(model_rf, open("models/model_rf.pkl", 'wb'))
+pickle.dump(rs, open("models/scaler.pkl", 'wb'))
 
 print(confusion_matrix(Y_test, y_predict))
 
@@ -166,7 +171,7 @@ print(classification_report(Y_test, y_predict, output_dict=True)["weighted avg"]
 mlflow.set_experiment(experiment_name="experiment0")
 mlflow.set_tracking_uri("http://127.0.0.1:5000")
 with mlflow.start_run():
-    for model_name,accuracy in result_frame.items():
-        mlflow.log_metric("Accuracy", accuracy[0])
-        mlflow.sklearn.log_model(model_name, "model")
-        tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
+#for model_name,accuracy in result_frame.items():
+    mlflow.log_metric("Accuracy",result_frame[RandomForestClassifier().__class__.__name__][0])
+    mlflow.sklearn.log_model(model_rf, "model")
+    tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme

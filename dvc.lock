@@ -4,4 +4,15 @@ model_train:
   - path: src/models/dataframe_test.csv
     md5: 8d41d98422eeb3e686f0929d447fdbad
   - path: src/models/train_model.py
-    md5: 2755b126af7fa7b070424f35b0368dc5
+    md5: c077a03713efa9ef8db071c1e0def23a
+deploy_model:
+  cmd: python app.py
+  deps:
+  - path: models/model_rf.pkl
+    md5: 0de702917ac402e979693b40796bd54a
+  - path: models/scaler.pkl
+    md5: 3c3c94defda14cce5d4d625a31d2dd04
+  - path: static
+    md5: d651749c86954104f53ff9e60a9f1492.dir
+  - path: templates/index.html
+    md5: fc7d6ae5a94d6820a367b0c3df3595c8
