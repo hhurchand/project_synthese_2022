@@ -17,7 +17,6 @@ from sklearn.preprocessing import RobustScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
-import mlflow
 import mlflow.sklearn
 from urllib.parse import urlparse
 
