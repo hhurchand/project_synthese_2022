@@ -24,7 +24,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip3 install -r requirements.txt
-          python src/models/train_model.py
+          python src/models/predict_model.py
           
 
   continuous-deployment:
