@@ -8,7 +8,7 @@ app = Flask(__name__)
 classification_dict = {"0": "Non conforme", "1": "conforme"}
 # Extraire les features de l'image
 model = pickle.load(open("models/model_rf.pkl","rb"))
-scaler = pickle.load(open("models/scaler.pkl","rb"))
+scaler = pickle.load(open("models/scaler1.pkl","rb"))
 
 def extraire_feature(img1):
     img = image.imread(img1)
