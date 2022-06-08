@@ -27,6 +27,15 @@ from sklearn.naive_bayes import GaussianNB
 
 import pickle
 
+from urllib.parse import urlparse
+import mlflow
+import mlflow.sklearn
+
+import logging
+
+logging.basicConfig(level=logging.WARN)
+logger = logging.getLogger(__name__)
+
 
 def load_data(raw=False):
     df = pd.DataFrame()
@@ -136,31 +145,24 @@ print(result_frame)
 model_rf = RandomForestClassifier()
 model_rf.fit(X_train_std, Y_train)
 
-print(accuracy_score(model_rf.predict(X_test_std), Y_test))
+accuracy_of_model = accuracy_score(model_rf.predict(X_test_std), Y_test)
+print(accuracy_of_model)
 
-# model_rf.feature_importances_.shape
+score_f1 = classification_report(Y_test, y_predict, output_dict=True)["weighted avg"]["f1-score"]
+print(score_f1)
 
-forest_importances = pd.Series(model_rf.feature_importances_, index=features)
+    os.environ['MLFLOW_TRACKING_USERNAME'] = "h.hurchand"
+    os.environ['MLFLOW_TRACKING_PASSWORD'] = "c849831fd1e33c252105db9c11369695ee50a48a"
+    mlflow.set_tracking_uri("https://dagshub.com/h.hurchand/dagshub_integration.mlflow")
+    mlflow.log_param("accuracy",accuracy_of_model)
+    mlflow.log_param("f1-score",score_f1)
 
-importances = model_rf.feature_importances_
-std = np.std([tree.feature_importances_ for tree in model_rf.estimators_], axis=0)
 
-fig, ax = plt.subplots()
-forest_importances.plot.bar(ax=ax)
-ax.set_title("Feature importances")
-ax.set_ylabel("Mean decrease in impurity")
-plt.figure(figsize=(20, 21))
-fig.tight_layout()
 
-# save serialized model and scaler
-pickle.dump(model_rf, open("models/model_rf.pkl", 'wb'))
-pickle.dump(rs, open("models/scaler.pkl", 'wb'))
 
-print(confusion_matrix(Y_test, y_predict))
 
-print(classification_report(Y_test, y_predict))
 
-print(classification_report(Y_test, y_predict, output_dict=True)["weighted avg"]["f1-score"])
+
 
 
 
