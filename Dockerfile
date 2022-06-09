@@ -11,7 +11,7 @@ RUN pip install pandas==0.25.1 \
 && apt-get update \
 && apt-get install -y git
 # Copy over artifact and code
-COPY run.sh /mlflow.dir
+COPY run.sh /src/models
 COPY src/models/dataframe_test.csv /src/models
 COPY src/models/predict_model.py /src/models
-CMD ["python", "/mlflow.dir/predict_model.py"]
+CMD ["python", "/src/models/predict_model.py"]
