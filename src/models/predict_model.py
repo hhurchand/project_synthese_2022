@@ -95,20 +95,7 @@ df_no_fault = df[df["Target"] == 1]
 
 print("length fault",df_fault.shape[0])
 print("length no fault",df_no_fault.shape[0])
-df_fault_describe = df_fault.describe()
-df_no_fault_describe = df_no_fault.describe()
 
-# df_fault_describe.loc["mean",features]
-
-
-# plt.plot(df_fault_describe.loc["mean",features])
-# plt.plot(df_no_fault_describe.loc["mean",features])
-
-
-# plt.plot(df_fault_describe.loc["std",features])
-# plt.plot(df_no_fault_describe.loc["std",features])
-
-# df.describe()
 
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3)
@@ -137,8 +124,7 @@ for model in models:
     y_predict = model.predict(X_test_std)
     accuracy_test = accuracy_score(Y_test, y_predict)
     result_frame[model.__class__.__name__].append(accuracy_test)
-#    result_frame[model.__class__.__name__].append(
-#        classification_report(Y_test, y_predict, output_dict=True)["weighted avg"]["f1-score"])
+
 
 print(result_frame)
 
