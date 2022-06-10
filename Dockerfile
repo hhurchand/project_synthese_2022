@@ -12,10 +12,10 @@ RUN pip install pandas==0.25.1 \
 && apt-get install -y git
 # Copy over artifact and code
 COPY run.sh /src/models
-RUN mkdir -p /src/models/src
-RUN mkdir -p /src/models/src/models
-COPY src/models/dataframe_test.csv /src/models/src/models
-RUN file="$(ls -l /src/models/src/models)" && echo $file
-RUN echo $(ls -l /src/models/src/)
+RUN mkdir -p /src/models
+RUN mkdir -p /src/models
+COPY src/models/dataframe_test.csv /src/models
+RUN file="$(ls -l /src/models)" && echo $file
+RUN echo $(ls -l /src/models)
 COPY src/models/predict_model.py /src/models
 CMD ["python", "predict_model.py"]
