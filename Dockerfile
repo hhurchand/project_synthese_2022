@@ -17,5 +17,5 @@ RUN mkdir -p /src/models
 COPY src/models/dataframe_test.csv /src/models
 RUN file="$(ls -l /src/models)" && echo $file
 RUN echo $(ls -l /src/models)
-COPY src/models/predict_model.py /src/models
-CMD ["python", "predict_model.py"]
+COPY src/models/p1.py /src/models
+CMD ["python", "p1.py"]
