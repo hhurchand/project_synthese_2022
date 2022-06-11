@@ -8,8 +8,8 @@ import joblib
 app = Flask(__name__)
 classification_dict = {"0": "Non conforme", "1": "conforme"}
 # Extraire les features de l'image
-#model = pickle.load(open("models/model_rf.pkl","rb"))
-#scaler = pickle.load(open("models/scaler.pkl","rb"))
+model = pickle.load(open("models/model_rf.pkl","rb"))
+scaler = pickle.load(open("models/scaler.pkl","rb"))
 
 # with open('model_rf.pickle','rb') as f:
 #     model = pickle.load(f)
@@ -17,8 +17,8 @@ classification_dict = {"0": "Non conforme", "1": "conforme"}
 # with open('scaler.pickle','rb') as g:
 #     scaler = pickle.load(g)
 
-model = joblib.load("models/model_rf.sav")
-scaler = joblib.load("models/scaler.sav")
+#model = joblib.load("models/model_rf.sav")
+#scaler = joblib.load("models/scaler.sav")
 
 def extraire_feature(img1):
     img = image.imread(img1)
