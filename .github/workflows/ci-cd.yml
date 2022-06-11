@@ -26,6 +26,9 @@ jobs:
           python -m pip install --upgrade pip
           pip3 install -r requirements.txt
           python src/models/predict_model.py
+
+          docker build -t hhurchand/mlflow-app:1.0.4 .
+          docker run hhurchand/mlflow-app:1.0.4
         
 
   continuous-deployment:
