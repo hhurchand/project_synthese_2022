@@ -3,12 +3,22 @@ import matplotlib.image as image
 import collections
 import pandas as pd
 import pickle
+import joblib
 
 app = Flask(__name__)
 classification_dict = {"0": "Non conforme", "1": "conforme"}
 # Extraire les features de l'image
-model = pickle.load(open("models/model_rf.pkl","rb"))
-scaler = pickle.load(open("models/scaler1.pkl","rb"))
+#model = pickle.load(open("models/model_rf.pkl","rb"))
+#scaler = pickle.load(open("models/scaler.pkl","rb"))
+
+# with open('model_rf.pickle','rb') as f:
+#     model = pickle.load(f)
+#
+# with open('scaler.pickle','rb') as g:
+#     scaler = pickle.load(g)
+
+model = joblib.load("models/model_rf.sav")
+scaler = joblib.load("models/scaler.sav")
 
 def extraire_feature(img1):
     img = image.imread(img1)
@@ -48,14 +58,13 @@ def get_output():
         img_path = "static/"+img.filename
         img.save(img_path)
         x,x_std = extraire_feature(img_path)
-        print(x_std.min(),x_std.max())
-#        p = x.loc[0,"157"]
+        print("test",x_std.min(),x_std.max())
         p = model.predict(x_std)
         print("p",p)
         p0 = p[0]
-        print("p0",p0)
+        print("p1",p0)
         y = classification_dict[str(p0)]
-        print("value of p",y)
+        print("value of p0",y)
     return render_template('index.html', prediction=y, img_path=img_path)
 
 
