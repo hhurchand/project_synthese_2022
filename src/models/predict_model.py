@@ -72,7 +72,7 @@ def load_data(raw=False):
 
     elif raw == False:
 
-        path = "/src/models"
+        path = "src/models"
         df = pd.read_csv(path + "/dataframe_test.csv", header=0)
 
     return df
