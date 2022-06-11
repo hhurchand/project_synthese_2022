@@ -1,181 +1,165 @@
-# -*- coding: utf-8 -*-
-"""Methode Classique_12_05_2022.ipynb
-
-"""
+#!/usr/bin/env python
+# coding: utf-8
 
 import numpy as np
 import pandas as pd
+#import pickle
+import joblib
 
-# Importer les données
-import glob
-import matplotlib.image as image
-import random
-import collections
-import matplotlib.pyplot as plt
-#
-from sklearn.preprocessing import RobustScaler
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+# # Distribution des pixels
 
-import mlflow.sklearn
-from urllib.parse import urlparse
-
-from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.naive_bayes import GaussianNB
-
-import pickle
-
-import logging
-logging.basicConfig(level=logging.WARN)
-logger = logging.getLogger(__name__)
-
-def load_data(raw=False):
-    df = pd.DataFrame()
-    if raw == True:
-        path = "data/external/train.csv/ok_front"
-        file_list_test_ok = glob.glob(path + "/*.*")
-        path = "data/external/train.csv/def_front"
-        file_list_test_not_ok = glob.glob(path + "/*.*")
-        print(len(file_list_test_ok),len(file_list_test_not_ok))
-        combined_file_list = []
-        for i in file_list_test_ok:
-            combined_file_list.append((i, 1))
-        for j in file_list_test_not_ok:
-            combined_file_list.append((j, 0))
-
-        random.shuffle(combined_file_list)
-
-        ind = 0
-
-        for imag, target in combined_file_list:
-            img = image.imread(imag)
-            pixels_line_i = []
-            for i in range(512):
-                for j in range(512):
-                    pixels_line_i.append(img[i][j][0])
-
-            counter = dict(collections.Counter(pixels_line_i))
-            counter["Target"] = target
-            ind += 1
-            df = pd.concat([df, pd.DataFrame(counter, index=[ind])], ignore_index=True)
-
-        df.fillna(0, inplace=True)
-        df.to_csv("dataframe_test.csv", index=False)
-
-    elif raw == False:
-
-        path = "src/models"
-        df = pd.read_csv(path + "/dataframe_test.csv", header=0)
-
-    return df
+# In[3]:
 
 
-df = load_data(raw=False)
-print(df.columns)
-print(df.shape)
+df = pd.read_csv("src/models/dataframe_test.csv",header=0)
+
+# In[4]:
+
+
 Y = df["Target"]
 features = set(df.columns) - {"Target"}
 X = df[features]
 
-print(Y.shape)
+# In[5]:
 
-print(X.shape)
 
 # Examine the mean distribution of pixels by category
 df_fault = df[df["Target"] == 0]
 df_no_fault = df[df["Target"] == 1]
 
-print("length fault",df_fault.shape[0])
-print("length no fault",df_no_fault.shape[0])
 df_fault_describe = df_fault.describe()
 df_no_fault_describe = df_no_fault.describe()
 
-# df_fault_describe.loc["mean",features]
+from sklearn.preprocessing import RobustScaler
+from sklearn.model_selection import train_test_split
 
-
-# plt.plot(df_fault_describe.loc["mean",features])
-# plt.plot(df_no_fault_describe.loc["mean",features])
-
-
-# plt.plot(df_fault_describe.loc["std",features])
-# plt.plot(df_no_fault_describe.loc["std",features])
-
-# df.describe()
-
-
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3)
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.31)
 
 print(X_train.shape, X_test.shape)
-
 print(Y_train.shape, Y_test.shape)
+
+
 
 rs = RobustScaler().fit(X_train)
 
+
+
+filename_scaler = 'models/scaler.sav'
+joblib.dump(rs,filename_scaler)
+rs1 = joblib.load("models/scaler.sav")
+
 X_train_std = rs.transform(X_train)
+X_train_std_x = rs1.transform(X_train)
+
+# In[12]:
+print("real",X_train_std.min(),X_train_std.max())
+print("copied",X_train_std_x.min(),X_train_std_x.max())
 
 X_test_std = rs.transform(X_test)
+X_test_std_x = rs1.transform(X_test)
+# In[13]:
+print("real_test",X_test_std.min(),X_test_std.max())
+print("copied_test",X_test_std_x.min(),X_test_std_x.max())
+
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+
+# In[14]:
 
 
+# models = [SVC(C=100),RandomForestClassifier(),LogisticRegression(max_iter=300),\
+#          DecisionTreeClassifier(),AdaBoostClassifier(),KNeighborsClassifier(),GaussianNB()]
+model_0 = RandomForestClassifier()
 
-models = [SVC(C=100), RandomForestClassifier(),
-          DecisionTreeClassifier(), AdaBoostClassifier(), KNeighborsClassifier(), GaussianNB()]
+filename_model = 'models/model_rf.sav'
+joblib.dump(model_0.fit(X_train_std, Y_train), filename_model)
+models_1 = [joblib.load("models/model_rf.sav")]
 
-result_frame = {model.__class__.__name__: list() for model in models}
-# result_frame
+# In[15]:
 
 
-for model in models:
-    model.fit(X_train_std, Y_train)
-    y_predict = model.predict(X_test_std)
-    accuracy_test = accuracy_score(Y_test, y_predict)
-    result_frame[model.__class__.__name__].append(accuracy_test)
-#    result_frame[model.__class__.__name__].append(
-#        classification_report(Y_test, y_predict, output_dict=True)["weighted avg"]["f1-score"])
+#result_frame = {model.__class__.__name__: list() for model in models}
 
-print(result_frame)
+# In[16]:
 
-model_rf = RandomForestClassifier()
-model_rf.fit(X_train_std, Y_train)
 
-print(accuracy_score(model_rf.predict(X_test_std), Y_test))
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
-# model_rf.feature_importances_.shape
+# In[17]:
 
-forest_importances = pd.Series(model_rf.feature_importances_, index=features)
 
-importances = model_rf.feature_importances_
-std = np.std([tree.feature_importances_ for tree in model_rf.estimators_], axis=0)
+#for model in models:
+#    model.fit(X_train_std, Y_train)
+y_predict = model_0.predict(X_test_std)
+accuracy_test = accuracy_score(Y_test, y_predict)
+#result_frame[model.__class__.__name__].append(accuracy_test)
+#result_frame[model.__class__.__name__].append(
+#classification_report(Y_test, y_predict, output_dict=True)["weighted avg"]["f1-score"])
 
-fig, ax = plt.subplots()
-forest_importances.plot.bar(ax=ax)
-ax.set_title("Feature importances")
-ax.set_ylabel("Mean decrease in impurity")
-plt.figure(figsize=(20, 21))
-fig.tight_layout()
+# In[18]:
 
-# save serialized model and scaler
-pickle.dump(model_rf, open("models/model_rf.pkl", 'wb'))
-pickle.dump(rs, open("models/scaler.pkl", 'wb'))
+#model_rf = models[0]
+#model_rf = RandomForestClassifier()
+#model_rf.fit(X_train_std, Y_train)
+y_predict_1 = models_1[0].predict(X_test_std_x)
+print("accuracy_copied",accuracy_score(Y_test, y_predict_1))
+# In[19]:
+
+
+print("accuracy True",accuracy_score(model_0.predict(X_test_std), Y_test))
+
+# forest_importances = pd.Series(model_rf.feature_importances_, index=features)
+#
+# importances = model_rf.feature_importances_
+# std = np.std([tree.feature_importances_ for tree in model_rf.estimators_], axis=0)
+#
+# fig, ax = plt.subplots()
+# forest_importances.plot.bar(ax=ax)
+# ax.set_title("Feature importances")
+# ax.set_ylabel("Mean decrease in impurity")
+# plt.figure(figsize=(20,20))
+# fig.tight_layout()
+
+# In[20]:
+
+# open a file, where you ant to store the model
+#pickle.dump(model_rf, open("models/model_rf.pkl", 'wb'))
+#pickle.dump(rs, open("models/scaler.pkl", 'wb'))
+# with open('model_rf.pickle', 'wb') as f:
+#     pickle.dump(model_rf, f)
+#
+# with open('scaler.pickle', 'wb') as g:
+#     pickle.dump(rs, g)
+##filename_model = 'models/model_rf.sav'
+##joblib.dump(model_rf, filename_model)
+
+##filename_scaler = 'models/scaler.sav'
+##joblib.dump(rs, filename_scaler)
+
+print(accuracy_test)
+
+# In[21]:
+
 
 print(confusion_matrix(Y_test, y_predict))
 
+# In[22]:
+
+
 print(classification_report(Y_test, y_predict))
 
-print(classification_report(Y_test, y_predict, output_dict=True)["weighted avg"]["f1-score"])
+# In[23]:
 
 
-mlflow.set_experiment(experiment_name="experiment0")
-try:
-    mlflow.set_tracking_uri("http://127.0.0.1:5000")
-    with mlflow.start_run():
-#for model_name,accuracy in result_frame.items():
-        mlflow.log_metric("Accuracy",result_frame[RandomForestClassifier().__class__.__name__][0])
-        mlflow.sklearn.log_model(model_rf, "model")
-        tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
-except:
-    print("logged on dogs hub")
+print("classification report", classification_report(Y_test, y_predict, output_dict=True)["weighted avg"]["f1-score"])
+
+
+
+
+
 
 

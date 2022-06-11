@@ -98,7 +98,7 @@ print("length no fault",df_no_fault.shape[0])
 
 
 
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3)
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
 
 print(X_train.shape, X_test.shape)
 

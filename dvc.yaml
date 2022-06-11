@@ -9,7 +9,7 @@ stages:
   deploy_model:
     cmd: python app.py
     deps:
-    - models/model_rf.pkl
-    - models/scaler.pkl
+    - models/model_rf.sav
+    - models/scaler.sav
     - templates/index.html
     - static
