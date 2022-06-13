@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  continuous-integration:
+  integration-continue:
     runs-on: [ubuntu-latest]
  
     steps:
@@ -27,12 +27,30 @@ jobs:
           pip3 install -r requirements.txt
           python src/models/predict_model.py
 
-          docker build -t hhurchand/mlflow-app:1.0.4 .
-          docker run hhurchand/mlflow-app:1.0.4
-        
+          
+  suivi-metriques:
+    needs: integration-continue
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
 
-  continuous-deployment:
-    needs: continuous-integration
+      - uses: iterative/setup-cml@v1
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: cml
+        env:
+          REPO_TOKEN: ${{ secrets.CI_CD_BOSTON_TOKEN }}
+        run: |
+
+            docker build -t hhurchand/mlflow-app:1.0.4 .
+            docker run hhurchand/mlflow-app:1.0.4
+    
+
+  deploiement-continue:
+    needs: integration-continue
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
