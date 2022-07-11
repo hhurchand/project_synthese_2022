@@ -33,7 +33,7 @@ df_no_fault_describe = df_no_fault.describe()
 from sklearn.preprocessing import RobustScaler
 from sklearn.model_selection import train_test_split
 
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.30)
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.31)
 
 print(X_train.shape, X_test.shape)
 print(Y_train.shape, Y_test.shape)
