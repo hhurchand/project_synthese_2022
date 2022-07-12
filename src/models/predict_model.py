@@ -12,7 +12,6 @@ import matplotlib.image as image
 import random
 import collections
 import matplotlib.pyplot as plt
-import df2img
 #
 from sklearn.preprocessing import RobustScaler
 from sklearn.model_selection import train_test_split
