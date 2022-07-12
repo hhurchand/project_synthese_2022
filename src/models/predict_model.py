@@ -127,7 +127,7 @@ for model in models:
     result_frame[model.__class__.__name__].append(accuracy_test)
 
 df_result = pd.DataFrame(result_frame,index=["Accuracy"])
-dfi.export(df_result, "artifacts/mytable.png")
+dfi.export(df_result, "mytable.png")
 
 model_rf = RandomForestClassifier()
 model_rf.fit(X_train_std, Y_train)
@@ -140,13 +140,13 @@ score_f1 = classification_report(Y_test, y_pred, output_dict=True)["weighted avg
 cm = confusion_matrix(Y_test, y_pred)
 disp = ConfusionMatrixDisplay(confusion_matrix=cm)
 disp.plot()
-plt.savefig('artifacts/confusion_matrix.png')
+plt.savefig('confusion_matrix.png')
 os.environ['MLFLOW_TRACKING_USERNAME'] = "h.hurchand"
 os.environ['MLFLOW_TRACKING_PASSWORD'] = "c849831fd1e33c252105db9c11369695ee50a48a"
 mlflow.set_tracking_uri("https://dagshub.com/h.hurchand/dagshub_integration.mlflow")
-mlflow.log_param("accuracy",accuracy_of_model)
-mlflow.log_artifact("artifacts/confusion_matrix.png")
-mlflow.log_artifact("artifacts/mytable.png")
+mlflow.log_param("accuracy", accuracy_of_model)
+mlflow.log_artifact("confusion_matrix.png")
+mlflow.log_artifact("mytable.png")
 
 
 
