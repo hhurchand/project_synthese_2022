@@ -127,7 +127,7 @@ for model in models:
     result_frame[model.__class__.__name__].append(accuracy_test)
 
 df_result = pd.DataFrame(result_frame,index=["Accuracy"])
-dfi.export(df_result, "mytable.png")
+dfi.export(df_result,"mytable.png")
 
 model_rf = RandomForestClassifier()
 model_rf.fit(X_train_std, Y_train)
