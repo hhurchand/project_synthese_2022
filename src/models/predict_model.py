@@ -12,11 +12,12 @@ import matplotlib.image as image
 import random
 import collections
 import matplotlib.pyplot as plt
+import df2img
 #
 from sklearn.preprocessing import RobustScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-
+from sklearn.metrics import ConfusionMatrixDisplay
 
 
 from sklearn.svm import SVC
@@ -26,6 +27,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 import os
 import pickle
+import dataframe_image as dfi
 
 from urllib.parse import urlparse
 import mlflow
@@ -125,23 +127,27 @@ for model in models:
     accuracy_test = accuracy_score(Y_test, y_predict)
     result_frame[model.__class__.__name__].append(accuracy_test)
 
-
-print(result_frame)
+df_result = pd.DataFrame(result_frame,index=["Accuracy"])
+dfi.export(df_result, "artifacts/mytable.png")
 
 model_rf = RandomForestClassifier()
 model_rf.fit(X_train_std, Y_train)
 
-accuracy_of_model = accuracy_score(model_rf.predict(X_test_std), Y_test)
+y_pred = model_rf.predict(X_test_std)
+accuracy_of_model = accuracy_score(y_pred, Y_test)
 print(accuracy_of_model)
 
-score_f1 = classification_report(Y_test, y_predict, output_dict=True)["weighted avg"]["f1-score"]
-print(score_f1)
-
+score_f1 = classification_report(Y_test, y_pred, output_dict=True)["weighted avg"]["f1-score"]
+cm = confusion_matrix(Y_test, y_pred)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+disp.plot()
+plt.savefig('artifacts/confusion_matrix.png')
 os.environ['MLFLOW_TRACKING_USERNAME'] = "h.hurchand"
 os.environ['MLFLOW_TRACKING_PASSWORD'] = "c849831fd1e33c252105db9c11369695ee50a48a"
 mlflow.set_tracking_uri("https://dagshub.com/h.hurchand/dagshub_integration.mlflow")
 mlflow.log_param("accuracy",accuracy_of_model)
-mlflow.log_param("f1-score",score_f1)
+mlflow.log_artifact("artifacts/confusion_matrix.png")
+mlflow.log_artifact("artifacts/mytable.png")
 
 
 

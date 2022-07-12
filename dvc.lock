@@ -1,18 +1,18 @@
 model_train:
-  cmd: python src/models/train_model.py
+  cmd: python src/models/predict_model.py
   deps:
   - path: src/models/dataframe_test.csv
     md5: 8d41d98422eeb3e686f0929d447fdbad
-  - path: src/models/train_model.py
-    md5: e78f90f18ce822cb14b796ee455dba34
+  - path: src/models/predict_model.py
+    md5: 34df06fce6c17251efaf4565645a9726
 deploy_model:
   cmd: python app.py
   deps:
-  - path: models/model_rf.sav
-    md5: 2484cc69a0f90aa75ee64ec9fdcdf578
-  - path: models/scaler.sav
-    md5: 47c06d6134c897b3c70a99fbec5950ad
+  - path: models/model_rf.pkl
+    md5: c84eb21c80cb2d533ffe38aa76038601
+  - path: models/scaler.pkl
+    md5: 410b681807bab4f737d372f378e0c5bf
   - path: static
-    md5: 9352669c405c098bea075df0b170294b.dir
+    md5: c9b1d9b2e4f3d5f1a46ca8244ec6e6d2.dir
   - path: templates/index.html
-    md5: fc7d6ae5a94d6820a367b0c3df3595c8
+    md5: f553a564524217f26a40fdb1fcc0fc9a

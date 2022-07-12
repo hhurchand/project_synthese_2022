@@ -1,15 +1,15 @@
 stages:
 
   model_train:
-    cmd: python src/models/train_model.py
+    cmd: python src/models/predict_model.py
     deps:
     - src/models/dataframe_test.csv
-    - src/models/train_model.py
+    - src/models/predict_model.py
 
   deploy_model:
     cmd: python app.py
     deps:
-    - models/model_rf.sav
-    - models/scaler.sav
+    - models/model_rf.pkl
+    - models/scaler.pkl
     - templates/index.html
     - static

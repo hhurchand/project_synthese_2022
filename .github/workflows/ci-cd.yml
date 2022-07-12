@@ -29,6 +29,12 @@ jobs:
           pip3 install -r requirements.txt
           python src/models/predict_model.py
 
+	  echo "## Model Performance"
+          cml-publish mytable.png --md >> report.md
+          echo "## Confusion matrix"
+	  cml-pulish confusion_matrix.png --md >> report.md
+          cml-send-comment report.md 
+
           
   suivi-metriques:
     needs: integration-continue
