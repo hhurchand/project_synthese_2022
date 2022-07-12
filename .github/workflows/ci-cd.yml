@@ -33,6 +33,9 @@ jobs:
           echo "## Model Performance"
           cml-publish mytable.png --md >> report.md
           echo "## Confusion matrix"
+          cml-publish confusion_matrix.png --md >> report.md
+          cml send-comment --pr --update report.md
+
 
           
   suivi-metriques-mlflow:
