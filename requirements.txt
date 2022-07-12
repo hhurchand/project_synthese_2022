@@ -11,3 +11,4 @@ setuptools==60.2.0
 joblib~=1.1.0
 scikit-learn~=1.1.1
 dagshub
+dataframe-image==0.1.1
