@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import RobustScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-from sklearn.metrics import ConfusionMatrixDisplay
+# from sklearn.metrics import ConfusionMatrixDisplay
 
 
 from sklearn.svm import SVC
@@ -138,9 +138,9 @@ print(accuracy_of_model)
 
 score_f1 = classification_report(Y_test, y_pred, output_dict=True)["weighted avg"]["f1-score"]
 cm = confusion_matrix(Y_test, y_pred)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm)
-disp.plot()
-plt.savefig('confusion_matrix.png')
+#disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+#disp.plot()
+#plt.savefig('confusion_matrix.png')
 os.environ['MLFLOW_TRACKING_USERNAME'] = "h.hurchand"
 os.environ['MLFLOW_TRACKING_PASSWORD'] = "c849831fd1e33c252105db9c11369695ee50a48a"
 mlflow.set_tracking_uri("https://dagshub.com/h.hurchand/dagshub_integration.mlflow")
@@ -150,7 +150,7 @@ mlflow.log_metric("accuracy DT",df_result.iloc[0,2])
 mlflow.log_metric("accuracy AdaB",df_result.iloc[0,3])
 mlflow.log_metric("accuracy kNN",df_result.iloc[0,4])
 mlflow.log_metric("accuracy NB",df_result.iloc[0,5])
-mlflow.log_artifact("confusion_matrix.png")
+#mlflow.log_artifact("confusion_matrix.png")
 mlflow.log_artifact("mytable.png")
 
 
