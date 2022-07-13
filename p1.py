@@ -125,13 +125,13 @@ for model in models:
     y_predict = model.predict(X_test_std)
     accuracy_test = accuracy_score(Y_test, y_predict)
     result_frame[model.__class__.__name__].append(accuracy_test)
-
+print("ok1")
 df_result = pd.DataFrame(result_frame,index=["Accuracy"])
 dfi.export(df_result,"mytable.png")
-
+print("ok2")
 model_rf = RandomForestClassifier()
 model_rf.fit(X_train_std, Y_train)
-
+print("ok3")
 y_pred = model_rf.predict(X_test_std)
 accuracy_of_model = accuracy_score(y_pred, Y_test)
 print(accuracy_of_model)
@@ -151,8 +151,9 @@ mlflow.log_metric("accuracy AdaB",df_result.iloc[0,3])
 mlflow.log_metric("accuracy kNN",df_result.iloc[0,4])
 mlflow.log_metric("accuracy NB",df_result.iloc[0,5])
 #mlflow.log_artifact("confusion_matrix.png")
+print("ok5")
 mlflow.log_artifact("mytable.png")
-
+print("ok6")
 
 
 
