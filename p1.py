@@ -149,7 +149,7 @@ mlflow.log_metric("accuracy RF",df_result.iloc[0,1])
 mlflow.log_metric("accuracy DT",df_result.iloc[0,2])
 mlflow.log_metric("accuracy AdaB",df_result.iloc[0,3])
 mlflow.log_metric("accuracy kNN",df_result.iloc[0,4])
-mlflow.log_metric("accuracy NB",df_result.iloc[0,5])
+#mlflow.log_metric("accuracy NB",df_result.iloc[0,5])
 #mlflow.log_artifact("confusion_matrix.png")
 mlflow.log_artifact("mytable.png")
 
