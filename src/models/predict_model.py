@@ -144,7 +144,7 @@ plt.savefig('confusion_matrix.png')
 os.environ['MLFLOW_TRACKING_USERNAME'] = "h.hurchand"
 os.environ['MLFLOW_TRACKING_PASSWORD'] = "c849831fd1e33c252105db9c11369695ee50a48a"
 mlflow.set_tracking_uri("https://dagshub.com/h.hurchand/dagshub_integration.mlflow")
-mlflow.log_param("accuracy", accuracy_of_model)
+mlflow.log_metric("accuracy", accuracy_of_model)
 mlflow.log_artifact("confusion_matrix.png")
 mlflow.log_artifact("mytable.png")
 
