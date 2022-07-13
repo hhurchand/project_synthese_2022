@@ -4,7 +4,7 @@ ENV SERVER_HOST 0.0.0.0
 EXPOSE 3000
 WORKDIR /src/models
 RUN pip install pandas==0.25.1 \
-&& pip install scikit-learn==0.21.3 \
+&& pip install scikit-learn==1.1.1 \
 && pip install matplotlib==3.5.2\
 && pip install protobuf==3.20.1 \
 && pip install mlflow==1.2.0 \
