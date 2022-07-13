@@ -32,7 +32,7 @@ jobs:
           echo "## Report"
           echo "## Confusion matrix2"
           cml publish confusion_matrix.png --md >> report.md
-          cml send-comment --pr --update report.md
+          cml send-comment report.md
 
 
           
