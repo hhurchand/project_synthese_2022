@@ -22,7 +22,6 @@ jobs:
  
       - name: cml
         env:
-          REPO_TOKEN: ${{ secrets.CI_CD_BOSTON_TOKEN }}
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
         run: |
@@ -30,8 +29,8 @@ jobs:
           python -m pip install --upgrade pip
           pip3 install -r requirements.txt
           python src/models/predict_model.py
-
-          echo "## Confusion matrix"
+          echo "## Report"
+          echo "## Confusion matrix2"
           cml publish confusion_matrix.png --md >> report.md
           cml send-comment --pr --update report.md
 
